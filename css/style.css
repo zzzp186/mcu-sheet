@@ -1,0 +1,1432 @@
+<<<<<<< HEAD
+:root {
+    --bg: #0a0e14;
+    --surface: #141b22;
+    --chip-body: #1a1d25;
+    --chip-top: #252a35;
+    --text: #c8ccd4;
+    --text-secondary: #8899aa;
+    --gold: #d4a040;
+    --gold-light: #f0c860;
+    --gpio-green: #4da868;
+    --gpio-green-light: #6fd488;
+    --power-gold: #c8922a;
+    --power-gold-light: #e8b840;
+    --reset-orange: #d4554a;
+    --reset-orange-light: #f0685a;
+    --boot-blue: #4a80c0;
+    --boot-blue-light: #5c9ad8;
+    --clock-purple: #8a5cb8;
+    --clock-purple-light: #a478d0;
+    --jtag-cyan: #3d9090;
+    --jtag-cyan-light: #50b0b0;
+    --analog-magenta: #b85a88;
+    --analog-magenta-light: #d070a0;
+    --pin-silver: #9aa0a8;
+    --pin-silver-light: #c8ced6;
+    --glow-strong: 0 0 18px;
+    --glow-soft: 0 0 8px;
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 背景粒子 */
+.bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.bg-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(100, 160, 220, 0.25);
+    animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+    0% {
+        transform: translateY(105vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-10vh) scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* 主容器 */
+.main-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ========== 芯片展示区 ========== */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    position: relative;
+}
+.hero-title {
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #e0e4ec;
+    text-align: center;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(140, 180, 220, 0.4);
+}
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 25px;
+    opacity: 0.75;
+}
+
+.chip-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    width: min(820px, 100%);
+    margin-top: 24px;
+}
+
+.chip-card {
+    display: block;
+    padding: 22px 18px;
+    border-radius: 22px;
+    background: rgba(28, 35, 50, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+    color: #f4f7fb;
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.chip-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(100, 180, 240, 0.4);
+    background: rgba(36, 50, 74, 0.95);
+}
+
+.chip-card-title {
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.chip-card-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+.chip-card-tags {
+    font-size: 0.78rem;
+    color: rgba(200, 220, 255, 0.7);
+    letter-spacing: 0.12em;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    padding: 10px 16px;
+    background: rgba(35, 46, 65, 0.92);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #dfe9ff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast);
+}
+
+.back-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+    border-color: rgba(100, 180, 240, 0.4);
+}
+
+/* 芯片整体容器 */
+.chip-wrapper {
+    position: relative;
+    width: min(680px, 90vw);
+    height: min(680px, 90vw);
+    /* 确保正方形 */;
+}
+.chip-wrapper.ensure-square {
+    aspect-ratio: 1 / 1;
+    height: auto;
+    width: min(680px, 85vw);
+}
+@media (max-width: 700px) {
+    .chip-wrapper.ensure-square {
+        width: 92vw;
+    }
+}
+
+.chip-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 芯片主体 */
+.chip-body {
+    position: relative;
+    width: 68%;
+    height: 68%;
+    background: var(--chip-body);
+    border-radius: 8px;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 0 0 1.5px rgba(80, 85, 95, 0.5);
+    z-index: 10;
+    transition: box-shadow var(--transition-smooth);
+    cursor: default;
+}
+.chip-body::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 5px;
+    background:
+        linear-gradient(135deg, rgba(40, 45, 55, 0.7) 0%, rgba(28, 32, 40, 0.9) 30%, rgba(35, 40, 50, 0.8) 60%, rgba(22, 26, 34, 0.9) 100%);
+    pointer-events: none;
+}
+/* 芯片表面纹理 */
+.chip-body::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 3px;
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 14px, rgba(255, 255, 255, 0.008) 14px, rgba(255, 255, 255, 0.008) 15px),
+        repeating-linear-gradient(90deg, transparent, transparent 14px, rgba(255, 255, 255, 0.006) 14px, rgba(255, 255, 255, 0.006) 15px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* 芯片中心标识 */
+.chip-logo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+}
+.chip-logo .model {
+    font-size: clamp(0.8rem, 1.7vw, 1.2rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d0d4dc;
+    text-shadow: 0 0 20px rgba(180, 200, 230, 0.35);
+    opacity: 0.85;
+}
+.chip-logo .brand {
+    font-size: clamp(0.5rem, 1vw, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #8899aa;
+    margin-top: 2px;
+    opacity: 0.6;
+}
+.chip-logo .arm-badge {
+    font-size: clamp(0.45rem, 0.85vw, 0.65rem);
+    letter-spacing: 0.1em;
+    color: #6a7a8a;
+    margin-top: 6px;
+    opacity: 0.5;
+    border: 1px solid rgba(120, 140, 160, 0.3);
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+/* 引脚1标记点 */
+.pin1-marker {
+    position: absolute;
+    bottom: 6%;
+    left: 6%;
+    width: 4%;
+    height: 4%;
+    background: radial-gradient(circle, #e8c860 0%, #a07820 100%);
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(200, 160, 60, 0.6);
+    animation: markerPulse 2.5s ease-in-out infinite;
+}
+@keyframes markerPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(200, 160, 60, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(240, 200, 80, 0.9);
+    }
+}
+
+/* ========== 引脚样式 ========== */
+.pin {
+    position: absolute;
+    z-index: 5;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-radius: 1px;
+}
+/* 上边和下边的引脚（水平排列，垂直延伸） */
+.pin.horizontal {
+    width: clamp(10px, 2.4%, 18px);
+    height: clamp(18px, 5.5%, 40px);
+    border-radius: 2px 2px 0 0;
+}
+.pin.horizontal.bottom-pin {
+    border-radius: 0 0 2px 2px;
+}
+/* 左边和右边的引脚（垂直排列，水平延伸） */
+.pin.vertical {
+    height: clamp(10px, 2.4%, 18px);
+    width: clamp(18px, 5.5%, 40px);
+    border-radius: 2px 0 0 2px;
+}
+.pin.vertical.right-pin {
+    border-radius: 0 2px 2px 0;
+}
+
+/* 不同类型引脚的颜色 —— 由 JS 根据 categoryConfig 动态注入，见 main.js 的 injectColorCSS() */
+
+/* 引脚悬停效果 */
+.pin:hover {
+    z-index: 100 !important;
+    filter: brightness(1.7) saturate(1.4);
+    transform-origin: center center;
+    box-shadow: var(--glow-strong) currentColor !important;
+    transform: scale(1.25);
+}
+.pin.horizontal:hover {
+    transform: scale(1.25, 1.35);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.7) !important;
+}
+.pin.vertical:hover {
+    transform: scale(1.35, 1.25);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 引脚编号标签 */
+.pin-label {
+    position: absolute;
+    font-size: clamp(7px, 1.2vw, 11px);
+    font-weight: 700;
+    color: #ffffff;
+    pointer-events: none;
+    z-index: 6;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.03em;
+    transition: all var(--transition-fast);
+    opacity: 0.7;
+}
+.pin:hover+.pin-label,
+.pin-label.hovered {
+    opacity: 1;
+    font-size: clamp(8px, 1.35vw, 12px);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+/* ========== Tooltip ========== */
+.tooltip-container {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    background: rgba(20, 26, 34, 0.97);
+    border: 1px solid rgba(100, 120, 150, 0.5);
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-width: 180px;
+    max-width: 260px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(60, 80, 110, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.tooltip-container.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.tooltip-pin-num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #8899aa;
+    margin-bottom: 2px;
+}
+.tooltip-pin-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #f0f4f8;
+    margin-bottom: 4px;
+}
+.tooltip-type-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+/* tooltip-type-badge 颜色 —— 由 JS 动态注入 */
+.tooltip-desc {
+    font-size: 0.88rem;
+    color: #b0b8c4;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+.tooltip-alt {
+    font-size: 0.8rem;
+    color: #8899aa;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* ========== 图例 ========== */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 20;
+    position: relative;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: #aab4be;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 14px;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+    background: rgba(30, 36, 46, 0.6);
+}
+.legend-item:hover {
+    border-color: rgba(150, 170, 200, 0.4);
+    color: #e0e6ee;
+    background: rgba(40, 48, 60, 0.8);
+}
+.legend-item.active {
+    border-color: rgba(200, 210, 230, 0.7);
+    color: #fff;
+    background: rgba(50, 60, 75, 0.9);
+    box-shadow: 0 0 12px rgba(150, 170, 200, 0.3);
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+/* legend-dot 颜色 —— 由 JS 动态注入 */
+
+/* 高亮模式 - 非选中引脚变暗 */
+.chip-wrapper.dim-unselected .pin {
+    opacity: 0.25;
+    filter: grayscale(0.6) brightness(0.5);
+    transition: all 0.35s ease;
+}
+.chip-wrapper.dim-unselected .pin.highlighted {
+    opacity: 1;
+    filter: none;
+    z-index: 50 !important;
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.6) !important;
+    animation: highlightGlow 0.8s ease-in-out infinite alternate;
+}
+@keyframes highlightGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.85);
+    }
+}
+
+/* ========== 滚动提示 ========== */
+.scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    z-index: 20;
+    position: relative;
+    animation: bounceDown 2s ease-in-out infinite;
+}
+.scroll-hint span {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: #667788;
+}
+.scroll-hint .arrow {
+    width: 22px;
+    height: 22px;
+    border-right: 2px solid #556677;
+    border-bottom: 2px solid #556677;
+    transform: rotate(45deg);
+    opacity: 0.7;
+}
+@keyframes bounceDown {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+/* ========== 表格区域 ========== */
+.table-section {
+    padding: 40px 16px 60px;
+    position: relative;
+    z-index: 1;
+}
+.table-section h2 {
+    text-align: center;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #d8dce4;
+    margin-bottom: 6px;
+}
+.table-section .table-subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #778899;
+    letter-spacing: 0.05em;
+    margin-bottom: 25px;
+}
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(80, 90, 110, 0.4);
+    background: var(--surface);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    max-height: 75vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.table-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(120, 140, 170, 0.35);
+    border-radius: 3px;
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(150, 170, 200, 0.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+}
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+thead th {
+    background: #1a202a;
+    color: #c8d0da;
+    font-weight: 700;
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 2px solid rgba(100, 120, 150, 0.5);
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(60, 70, 90, 0.25);
+    color: #bcc4ce;
+    vertical-align: top;
+    line-height: 1.4;
+}
+tbody tr {
+    transition: background 0.2s ease;
+}
+tbody tr:hover {
+    background: rgba(60, 80, 110, 0.2);
+}
+tbody tr:nth-child(even) {
+    background: rgba(25, 30, 40, 0.5);
+}
+tbody tr:nth-child(even):hover {
+    background: rgba(60, 80, 110, 0.25);
+}
+.td-pin {
+    font-weight: 700;
+    color: #e0e6ee;
+    white-space: nowrap;
+    min-width: 40px;
+}
+.td-name {
+    font-weight: 600;
+    color: #d0d8e2;
+    white-space: nowrap;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    letter-spacing: 0.02em;
+}
+.td-type {
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+.type-tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+}
+/* type-tag 颜色 —— 由 JS 动态注入 */
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: auto;
+        padding: 30px 10px 40px;
+    }
+    .chip-wrapper.ensure-square {
+        width: 94vw;
+    }
+    .tooltip-container {
+        min-width: 140px;
+        max-width: 200px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+    .tooltip-pin-name {
+        font-size: 1.1rem;
+    }
+    .tooltip-desc {
+        font-size: 0.8rem;
+    }
+    table {
+        font-size: 0.85rem;
+        min-width: 580px;
+    }
+    thead th,
+    tbody td {
+        padding: 7px 6px;
+    }
+    .legend {
+        gap: 6px 10px;
+    }
+    .legend-item {
+        font-size: 0.75rem;
+        padding: 3px 7px;
+        gap: 4px;
+    }
+    .legend-dot {
+        width: 7px;
+        height: 7px;
+    }
+}
+@media (max-width: 420px) {
+    .chip-wrapper.ensure-square {
+        width: 98vw;
+    }
+    .tooltip-container {
+        min-width: 110px;
+        max-width: 160px;
+        padding: 6px 8px;
+        font-size: 0.72rem;
+    }
+    .tooltip-pin-name {
+        font-size: 0.9rem;
+    }
+    table {
+        font-size: 0.72rem;
+        min-width: 480px;
+    }
+    .legend-item {
+        font-size: 0.65rem;
+        padding: 2px 5px;
+    }
+=======
+:root {
+    --bg: #0a0e14;
+    --surface: #141b22;
+    --chip-body: #1a1d25;
+    --chip-top: #252a35;
+    --text: #c8ccd4;
+    --text-secondary: #8899aa;
+    --gold: #d4a040;
+    --gold-light: #f0c860;
+    --gpio-green: #4da868;
+    --gpio-green-light: #6fd488;
+    --power-gold: #c8922a;
+    --power-gold-light: #e8b840;
+    --reset-orange: #d4554a;
+    --reset-orange-light: #f0685a;
+    --boot-blue: #4a80c0;
+    --boot-blue-light: #5c9ad8;
+    --clock-purple: #8a5cb8;
+    --clock-purple-light: #a478d0;
+    --jtag-cyan: #3d9090;
+    --jtag-cyan-light: #50b0b0;
+    --analog-magenta: #b85a88;
+    --analog-magenta-light: #d070a0;
+    --pin-silver: #9aa0a8;
+    --pin-silver-light: #c8ced6;
+    --glow-strong: 0 0 18px;
+    --glow-soft: 0 0 8px;
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 背景粒子 */
+.bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.bg-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(100, 160, 220, 0.25);
+    animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+    0% {
+        transform: translateY(105vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-10vh) scale(1.4);
+        opacity: 0;
+    }
+}
+
+/* 主容器 */
+.main-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ========== 芯片展示区 ========== */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    position: relative;
+}
+.hero-title {
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #e0e4ec;
+    text-align: center;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(140, 180, 220, 0.4);
+}
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 25px;
+    opacity: 0.75;
+}
+
+.chip-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    width: min(820px, 100%);
+    margin-top: 24px;
+}
+
+.chip-card {
+    display: block;
+    padding: 22px 18px;
+    border-radius: 22px;
+    background: rgba(28, 35, 50, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+    color: #f4f7fb;
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.chip-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(100, 180, 240, 0.4);
+    background: rgba(36, 50, 74, 0.95);
+}
+
+.chip-card-title {
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.chip-card-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+.chip-card-tags {
+    font-size: 0.78rem;
+    color: rgba(200, 220, 255, 0.7);
+    letter-spacing: 0.12em;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    padding: 10px 16px;
+    background: rgba(35, 46, 65, 0.92);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #dfe9ff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast);
+}
+
+.back-link:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+    border-color: rgba(100, 180, 240, 0.4);
+}
+
+/* 芯片整体容器 */
+.chip-wrapper {
+    position: relative;
+    width: min(680px, 90vw);
+    height: min(680px, 90vw);
+    /* 确保正方形 */;
+}
+.chip-wrapper.ensure-square {
+    aspect-ratio: 1 / 1;
+    height: auto;
+    width: min(680px, 85vw);
+}
+@media (max-width: 700px) {
+    .chip-wrapper.ensure-square {
+        width: 92vw;
+    }
+}
+
+.chip-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 芯片主体 */
+.chip-body {
+    position: relative;
+    width: 68%;
+    height: 68%;
+    background: var(--chip-body);
+    border-radius: 8px;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 0 0 1.5px rgba(80, 85, 95, 0.5);
+    z-index: 10;
+    transition: box-shadow var(--transition-smooth);
+    cursor: default;
+}
+.chip-body::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 5px;
+    background:
+        linear-gradient(135deg, rgba(40, 45, 55, 0.7) 0%, rgba(28, 32, 40, 0.9) 30%, rgba(35, 40, 50, 0.8) 60%, rgba(22, 26, 34, 0.9) 100%);
+    pointer-events: none;
+}
+/* 芯片表面纹理 */
+.chip-body::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 3px;
+    background:
+        repeating-linear-gradient(0deg, transparent, transparent 14px, rgba(255, 255, 255, 0.008) 14px, rgba(255, 255, 255, 0.008) 15px),
+        repeating-linear-gradient(90deg, transparent, transparent 14px, rgba(255, 255, 255, 0.006) 14px, rgba(255, 255, 255, 0.006) 15px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* 芯片中心标识 */
+.chip-logo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    pointer-events: none;
+}
+.chip-logo .model {
+    font-size: clamp(0.8rem, 1.7vw, 1.2rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d0d4dc;
+    text-shadow: 0 0 20px rgba(180, 200, 230, 0.35);
+    opacity: 0.85;
+}
+.chip-logo .brand {
+    font-size: clamp(0.5rem, 1vw, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #8899aa;
+    margin-top: 2px;
+    opacity: 0.6;
+}
+.chip-logo .arm-badge {
+    font-size: clamp(0.45rem, 0.85vw, 0.65rem);
+    letter-spacing: 0.1em;
+    color: #6a7a8a;
+    margin-top: 6px;
+    opacity: 0.5;
+    border: 1px solid rgba(120, 140, 160, 0.3);
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+/* 引脚1标记点 */
+.pin1-marker {
+    position: absolute;
+    bottom: 6%;
+    left: 6%;
+    width: 4%;
+    height: 4%;
+    background: radial-gradient(circle, #e8c860 0%, #a07820 100%);
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(200, 160, 60, 0.6);
+    animation: markerPulse 2.5s ease-in-out infinite;
+}
+@keyframes markerPulse {
+    0%,
+    100% {
+        box-shadow: 0 0 6px rgba(200, 160, 60, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(240, 200, 80, 0.9);
+    }
+}
+
+/* ========== 引脚样式 ========== */
+.pin {
+    position: absolute;
+    z-index: 5;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-radius: 1px;
+}
+/* 上边和下边的引脚（水平排列，垂直延伸） */
+.pin.horizontal {
+    width: clamp(10px, 2.4%, 18px);
+    height: clamp(18px, 5.5%, 40px);
+    border-radius: 2px 2px 0 0;
+}
+.pin.horizontal.bottom-pin {
+    border-radius: 0 0 2px 2px;
+}
+/* 左边和右边的引脚（垂直排列，水平延伸） */
+.pin.vertical {
+    height: clamp(10px, 2.4%, 18px);
+    width: clamp(18px, 5.5%, 40px);
+    border-radius: 2px 0 0 2px;
+}
+.pin.vertical.right-pin {
+    border-radius: 0 2px 2px 0;
+}
+
+/* 不同类型引脚的颜色 —— 由 JS 根据 categoryConfig 动态注入，见 main.js 的 injectColorCSS() */
+
+/* 引脚悬停效果 */
+.pin:hover {
+    z-index: 100 !important;
+    filter: brightness(1.7) saturate(1.4);
+    transform-origin: center center;
+    box-shadow: var(--glow-strong) currentColor !important;
+    transform: scale(1.25);
+}
+.pin.horizontal:hover {
+    transform: scale(1.25, 1.35);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.7) !important;
+}
+.pin.vertical:hover {
+    transform: scale(1.35, 1.25);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 引脚编号标签 */
+.pin-label {
+    position: absolute;
+    font-size: clamp(7px, 1.2vw, 11px);
+    font-weight: 700;
+    color: #ffffff;
+    pointer-events: none;
+    z-index: 6;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.03em;
+    transition: all var(--transition-fast);
+    opacity: 0.7;
+}
+.pin:hover+.pin-label,
+.pin-label.hovered {
+    opacity: 1;
+    font-size: clamp(8px, 1.35vw, 12px);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+/* ========== Tooltip ========== */
+.tooltip-container {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    background: rgba(20, 26, 34, 0.97);
+    border: 1px solid rgba(100, 120, 150, 0.5);
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-width: 180px;
+    max-width: 260px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(60, 80, 110, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.tooltip-container.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.tooltip-pin-num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #8899aa;
+    margin-bottom: 2px;
+}
+.tooltip-pin-name {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #f0f4f8;
+    margin-bottom: 4px;
+}
+.tooltip-type-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+/* tooltip-type-badge 颜色 —— 由 JS 动态注入 */
+.tooltip-desc {
+    font-size: 0.88rem;
+    color: #b0b8c4;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+.tooltip-alt {
+    font-size: 0.8rem;
+    color: #8899aa;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+/* ========== 图例 ========== */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 20;
+    position: relative;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: #aab4be;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 14px;
+    transition: all var(--transition-fast);
+    border: 1px solid transparent;
+    background: rgba(30, 36, 46, 0.6);
+}
+.legend-item:hover {
+    border-color: rgba(150, 170, 200, 0.4);
+    color: #e0e6ee;
+    background: rgba(40, 48, 60, 0.8);
+}
+.legend-item.active {
+    border-color: rgba(200, 210, 230, 0.7);
+    color: #fff;
+    background: rgba(50, 60, 75, 0.9);
+    box-shadow: 0 0 12px rgba(150, 170, 200, 0.3);
+}
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+/* legend-dot 颜色 —— 由 JS 动态注入 */
+
+/* 高亮模式 - 非选中引脚变暗 */
+.chip-wrapper.dim-unselected .pin {
+    opacity: 0.25;
+    filter: grayscale(0.6) brightness(0.5);
+    transition: all 0.35s ease;
+}
+.chip-wrapper.dim-unselected .pin.highlighted {
+    opacity: 1;
+    filter: none;
+    z-index: 50 !important;
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.6) !important;
+    animation: highlightGlow 0.8s ease-in-out infinite alternate;
+}
+@keyframes highlightGlow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.85);
+    }
+}
+
+/* ========== 滚动提示 ========== */
+.scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    z-index: 20;
+    position: relative;
+    animation: bounceDown 2s ease-in-out infinite;
+}
+.scroll-hint span {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: #667788;
+}
+.scroll-hint .arrow {
+    width: 22px;
+    height: 22px;
+    border-right: 2px solid #556677;
+    border-bottom: 2px solid #556677;
+    transform: rotate(45deg);
+    opacity: 0.7;
+}
+@keyframes bounceDown {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+/* ========== 表格区域 ========== */
+.table-section {
+    padding: 40px 16px 60px;
+    position: relative;
+    z-index: 1;
+}
+.table-section h2 {
+    text-align: center;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #d8dce4;
+    margin-bottom: 6px;
+}
+.table-section .table-subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #778899;
+    letter-spacing: 0.05em;
+    margin-bottom: 25px;
+}
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(80, 90, 110, 0.4);
+    background: var(--surface);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    max-height: 75vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.table-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(120, 140, 170, 0.35);
+    border-radius: 3px;
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(150, 170, 200, 0.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+}
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+thead th {
+    background: #1a202a;
+    color: #c8d0da;
+    font-weight: 700;
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 2px solid rgba(100, 120, 150, 0.5);
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(60, 70, 90, 0.25);
+    color: #bcc4ce;
+    vertical-align: top;
+    line-height: 1.4;
+}
+tbody tr {
+    transition: background 0.2s ease;
+}
+tbody tr:hover {
+    background: rgba(60, 80, 110, 0.2);
+}
+tbody tr:nth-child(even) {
+    background: rgba(25, 30, 40, 0.5);
+}
+tbody tr:nth-child(even):hover {
+    background: rgba(60, 80, 110, 0.25);
+}
+.td-pin {
+    font-weight: 700;
+    color: #e0e6ee;
+    white-space: nowrap;
+    min-width: 40px;
+}
+.td-name {
+    font-weight: 600;
+    color: #d0d8e2;
+    white-space: nowrap;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    letter-spacing: 0.02em;
+}
+.td-type {
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+.type-tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+}
+/* type-tag 颜色 —— 由 JS 动态注入 */
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: auto;
+        padding: 30px 10px 40px;
+    }
+    .chip-wrapper.ensure-square {
+        width: 94vw;
+    }
+    .tooltip-container {
+        min-width: 140px;
+        max-width: 200px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+    .tooltip-pin-name {
+        font-size: 1.1rem;
+    }
+    .tooltip-desc {
+        font-size: 0.8rem;
+    }
+    table {
+        font-size: 0.85rem;
+        min-width: 580px;
+    }
+    thead th,
+    tbody td {
+        padding: 7px 6px;
+    }
+    .legend {
+        gap: 6px 10px;
+    }
+    .legend-item {
+        font-size: 0.75rem;
+        padding: 3px 7px;
+        gap: 4px;
+    }
+    .legend-dot {
+        width: 7px;
+        height: 7px;
+    }
+}
+@media (max-width: 420px) {
+    .chip-wrapper.ensure-square {
+        width: 98vw;
+    }
+    .tooltip-container {
+        min-width: 110px;
+        max-width: 160px;
+        padding: 6px 8px;
+        font-size: 0.72rem;
+    }
+    .tooltip-pin-name {
+        font-size: 0.9rem;
+    }
+    table {
+        font-size: 0.72rem;
+        min-width: 480px;
+    }
+    .legend-item {
+        font-size: 0.65rem;
+        padding: 2px 5px;
+    }
+>>>>>>> 53609b4b186f5c5178629d93f4e4c170b42854c9
+}
